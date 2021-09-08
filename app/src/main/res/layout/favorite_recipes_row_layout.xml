@@ -36,7 +36,7 @@
 
                 <ImageView
                     android:id="@+id/favorite_recipe_imageView"
-                    loadImageFromUrl="@{favoritesEntity.result.image}"
+                    loadImageFromUrl="@{favoritesEntity.result.img}"
                     android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
@@ -55,7 +55,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/courgette"
                     android:maxLines="2"
-                    android:text="@{favoritesEntity.result.title}"
+                    android:text="@{favoritesEntity.result.name_eng}"
                     android:textColor="@color/titleColor"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -71,76 +71,26 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    parseHtml="@{favoritesEntity.result.summary}"
+                    parseHtml="@{favoritesEntity.result.name_san}"
                     android:textColor="@color/descriptionColor"
                     app:layout_constraintEnd_toEndOf="@+id/favorite_title_textView"
                     app:layout_constraintStart_toStartOf="@+id/favorite_title_textView"
                     app:layout_constraintTop_toBottomOf="@+id/favorite_title_textView" />
 
-                <ImageView
-                    android:id="@+id/favorite_heart_imageView"
-                    android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/favorite_pose_level_textView"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:layout_marginBottom="36dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/favorite_heart_textView"
-                    app:layout_constraintStart_toStartOf="@+id/favorite_heart_textView"
-                    app:layout_constraintTop_toBottomOf="@+id/favorite_description_textView"
-                    app:srcCompat="@drawable/ic_heart"
-                    app:tint="@color/red" />
-
-                <TextView
-                    android:id="@+id/favorite_heart_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@{String.valueOf(favoritesEntity.result.aggregateLikes)}"
-                    android:textAlignment="center"
-                    android:textColor="@color/red"
+                    android:ellipsize="end"
+                    android:maxLines="3"
+                    parseHtml="@{favoritesEntity.result.pose_level}"
+                    android:textColor="@color/descriptionColor"
+                    app:layout_constraintEnd_toEndOf="@+id/favorite_description_textView"
                     app:layout_constraintStart_toStartOf="@+id/favorite_description_textView"
-                    app:layout_constraintTop_toBottomOf="@+id/favorite_heart_imageView" />
+                    app:layout_constraintTop_toBottomOf="@+id/favorite_description_textView" />
 
-                <ImageView
-                    android:id="@+id/favorite_clock_imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@+id/favorite_clock_textView"
-                    app:layout_constraintStart_toStartOf="@+id/favorite_clock_textView"
-                    app:layout_constraintTop_toTopOf="@+id/favorite_heart_imageView"
-                    app:srcCompat="@drawable/ic_clock"
-                    app:tint="@color/yellow" />
 
-                <TextView
-                    android:id="@+id/favorite_clock_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:text="@{String.valueOf(favoritesEntity.result.readyInMinutes)}"
-                    android:textAlignment="center"
-                    android:textColor="@color/yellow"
-                    app:layout_constraintStart_toEndOf="@+id/favorite_heart_textView"
-                    app:layout_constraintTop_toBottomOf="@+id/favorite_clock_imageView" />
-
-                <ImageView
-                    android:id="@+id/favorite_leaf_imageView"
-                    applyVeganColor="@{favoritesEntity.result.vegan}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    app:layout_constraintEnd_toEndOf="@+id/favorite_leaf_textView"
-                    app:layout_constraintStart_toStartOf="@+id/favorite_leaf_textView"
-                    app:layout_constraintTop_toTopOf="@+id/favorite_clock_imageView"
-                    app:srcCompat="@drawable/ic_leaf" />
-
-                <TextView
-                    android:id="@+id/favorite_leaf_textView"
-                    applyVeganColor="@{favoritesEntity.result.vegan}"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="24dp"
-                    android:text="Vegan"
-                    android:textAlignment="center"
-                    app:layout_constraintStart_toEndOf="@+id/favorite_clock_textView"
-                    app:layout_constraintTop_toBottomOf="@+id/favorite_leaf_imageView" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

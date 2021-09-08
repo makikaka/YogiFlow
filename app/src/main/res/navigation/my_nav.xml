@@ -30,11 +30,6 @@
             android:id="@+id/action_favoriteRecipesFragment_to_detailsActivity"
             app:destination="@id/detailsActivity" />
     </fragment>
-    <fragment
-        android:id="@+id/foodJokeFragment"
-        android:name="com.example.yogiflow.ui.fragments.foodjoke.FoodJokeFragment"
-        android:label="Food Joke"
-        tools:layout="@layout/fragment_food_joke" />
     <dialog
         android:id="@+id/recipesBottomSheet"
         android:name="com.example.yogiflow.ui.fragments.recipes.bottomsheet.RecipesBottomSheet"

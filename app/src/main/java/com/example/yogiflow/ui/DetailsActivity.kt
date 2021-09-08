@@ -13,8 +13,6 @@ import com.example.yogiflow.R
 import com.example.yogiflow.adapters.PagerAdapter
 import com.example.yogiflow.data.database.entities.FavoritesEntity
 import com.example.yogiflow.databinding.ActivityDetailsBinding
-import com.example.yogiflow.ui.fragments.ingredients.IngredientsFragment
-import com.example.yogiflow.ui.fragments.instructions.InstructionsFragment
 import com.example.yogiflow.ui.fragments.overview.OverviewFragment
 import com.example.yogiflow.util.Constants.Companion.RECIPE_RESULT_KEY
 import com.example.yogiflow.viewmodels.MainViewModel
@@ -47,8 +45,6 @@ class DetailsActivity : AppCompatActivity() {
 
         val fragments = ArrayList<Fragment>()
         fragments.add(OverviewFragment())
-        fragments.add(IngredientsFragment())
-        fragments.add(InstructionsFragment())
 
         val titles = ArrayList<String>()
         titles.add("Overview")
@@ -95,7 +91,7 @@ class DetailsActivity : AppCompatActivity() {
         mainViewModel.readFavoriteRecipes.observe(this, { favoritesEntity ->
             try {
                 for (savedRecipe in favoritesEntity) {
-                    if (savedRecipe.result.recipeId == args.result.recipeId) {
+                    if (savedRecipe.result.id == args.result.id) {
                         changeMenuItemColor(menuItem, R.color.yellow)
                         savedRecipeId = savedRecipe.id
                         recipeSaved = true

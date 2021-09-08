@@ -9,7 +9,7 @@ class Constants {
         const val API_KEY = "e7a6f4e5fd844c76807687db194d8990"
 
         // YOGI API
-         const val BASE_URL = "192.168.100.11:8000/api/"
+         const val BASE_URL = "http://192.168.100.11:8000/api/"
 
         const val RECIPE_RESULT_KEY = "recipeBundle"
 
@@ -23,10 +23,9 @@ class Constants {
         const val QUERY_FILL_INGREDIENTS = "fillIngredients"
 
         // ROOM Database
-        const val DATABASE_NAME = "recipes_database"
-        const val RECIPES_TABLE = "recipes_table"
-        const val FAVORITE_RECIPES_TABLE = "favorite_recipes_table"
-        const val FOOD_JOKE_TABLE = "food_joke_table"
+        const val DATABASE_NAME = "yoga_database"
+        const val RECIPES_TABLE = "poses_table"
+        const val FAVORITE_RECIPES_TABLE = "favorite_poses_table"
 
 
 
