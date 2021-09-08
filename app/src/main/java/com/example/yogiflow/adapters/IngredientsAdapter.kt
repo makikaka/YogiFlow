@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import coil.load
 import com.example.yogiflow.R
 import com.example.yogiflow.databinding.IngredientsRowLayoutBinding
 import com.example.yogiflow.models.ExtendedIngredient

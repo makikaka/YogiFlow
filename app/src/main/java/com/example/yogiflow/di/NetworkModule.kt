@@ -1,7 +1,7 @@
 package com.example.yogiflow.di
 
 import com.example.yogiflow.util.Constants.Companion.BASE_URL
-import com.example.yogiflow.data.network.FoodRecipesApi
+import com.example.yogiflow.data.network.YogaPosesApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,8 +46,8 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): FoodRecipesApi {
-        return retrofit.create(FoodRecipesApi::class.java)
+    fun provideApiService(retrofit: Retrofit): YogaPosesApi {
+        return retrofit.create(YogaPosesApi::class.java)
     }
 
 }

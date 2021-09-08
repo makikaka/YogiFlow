@@ -7,7 +7,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
 
-interface FoodRecipesApi {
+interface YogaPosesApi {
 
     @GET("/recipes/complexSearch")
     suspend fun getRecipes(

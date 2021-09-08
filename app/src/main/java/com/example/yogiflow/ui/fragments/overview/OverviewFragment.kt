@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import coil.load
 import com.example.yogiflow.R
 import com.example.yogiflow.bindingadapters.RecipesRowBinding
 import com.example.yogiflow.databinding.FragmentOverviewBinding

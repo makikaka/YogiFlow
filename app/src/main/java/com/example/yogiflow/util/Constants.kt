@@ -4,9 +4,12 @@ class Constants {
 
     companion object {
 
-        const val BASE_URL = "https://api.spoonacular.com"
+//        const val BASE_URL = "https://api.spoonacular.com"
         const val BASE_IMAGE_URL = "https://spoonacular.com/cdn/ingredients_100x100/"
-        const val API_KEY = "[YOUR API KEY HERE]"
+        const val API_KEY = "e7a6f4e5fd844c76807687db194d8990"
+
+        // YOGI API
+         const val BASE_URL = "192.168.100.11:8000/api/"
 
         const val RECIPE_RESULT_KEY = "recipeBundle"
 
@@ -24,6 +27,8 @@ class Constants {
         const val RECIPES_TABLE = "recipes_table"
         const val FAVORITE_RECIPES_TABLE = "favorite_recipes_table"
         const val FOOD_JOKE_TABLE = "food_joke_table"
+
+
 
         // Bottom Sheet and Preferences
         const val DEFAULT_RECIPES_NUMBER = "50"
