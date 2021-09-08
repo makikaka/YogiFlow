@@ -1,14 +1,15 @@
 package com.example.yogiflow.data.network
 
+import com.example.yogiflow.models.AuthToken
 import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.models.Result
 import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.QueryMap
+import retrofit2.http.*
 
 interface YogaPosesApi {
 
-    @GET("/poses")
-    suspend fun getRecipes(): Response<FoodRecipe>
+    @GET("/api/poses")
+    suspend fun getRecipes(@Header("Authorization") authToken: AuthToken): Response<List<Result>>
 
 //    @GET("/recipes/complexSearch")
 //    suspend fun searchRecipes(

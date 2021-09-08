@@ -9,7 +9,7 @@ class Constants {
         const val API_KEY = "e7a6f4e5fd844c76807687db194d8990"
 
         // YOGI API
-         const val BASE_URL = "http://192.168.100.11:8000/api/"
+         const val BASE_URL = "http://192.168.100.11:8000"
 
         const val RECIPE_RESULT_KEY = "recipeBundle"
 

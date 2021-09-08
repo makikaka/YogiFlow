@@ -126,7 +126,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun requestApiData() {
         Log.d("RecipesFragment", "requestApiData called!")
-        mainViewModel.getRecipes(recipesViewModel.applyQueries())
+        mainViewModel.getRecipes()
         mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetworkResult.Success -> {

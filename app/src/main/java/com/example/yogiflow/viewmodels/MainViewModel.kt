@@ -4,11 +4,13 @@ import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.yogiflow.data.Repository
 import com.example.yogiflow.data.database.entities.FavoritesEntity
 import com.example.yogiflow.data.database.entities.RecipesEntity
 import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.models.Result
 import com.example.yogiflow.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -52,15 +54,15 @@ class MainViewModel @Inject constructor(
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
     var searchedRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
-    fun getRecipes(queries: Map<String, String>) = viewModelScope.launch {
-        getRecipesSafeCall(queries)
+    fun getRecipes() = viewModelScope.launch {
+        getRecipesSafeCall()
     }
 
     fun searchRecipes(searchQuery: Map<String, String>) = viewModelScope.launch {
         searchRecipesSafeCall(searchQuery)
     }
 
-    private suspend fun getRecipesSafeCall(queries: Map<String, String>) {
+    private suspend fun getRecipesSafeCall() {
         recipesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
@@ -98,7 +100,8 @@ class MainViewModel @Inject constructor(
         insertRecipes(recipesEntity)
     }
 
-    private fun handleFoodRecipesResponse(response: Response<FoodRecipe>): NetworkResult<FoodRecipe> {
+    private fun handleFoodRecipesResponse(response: Response<List<Result>>): NetworkResult<FoodRecipe> {
+
         when {
             response.message().toString().contains("timeout") -> {
                 return NetworkResult.Error("Timeout")
@@ -106,12 +109,13 @@ class MainViewModel @Inject constructor(
             response.code() == 402 -> {
                 return NetworkResult.Error("API Key Limited.")
             }
-            response.body()!!.results.isNullOrEmpty() -> {
+            response.body()!!.isNullOrEmpty() -> {
                 return NetworkResult.Error("Recipes not found.")
             }
             response.isSuccessful -> {
                 val foodRecipes = response.body()
-                return NetworkResult.Success(foodRecipes!!)
+                val foodRecipesModel = FoodRecipe(foodRecipes!!);
+                return NetworkResult.Success(foodRecipesModel)
             }
             else -> {
                 return NetworkResult.Error(response.message())
