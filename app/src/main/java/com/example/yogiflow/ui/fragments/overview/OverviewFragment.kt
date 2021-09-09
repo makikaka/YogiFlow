@@ -32,7 +32,7 @@ class OverviewFragment : Fragment() {
 
         binding.mainImageView.load(myBundle.img)
         binding.titleTextView.text = myBundle.name_eng
-        binding.timeTextView.text = myBundle.alias
+        binding.timeTextView.text = myBundle.pose_level
 
         return binding.root
     }
