@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/recipesFragment"
         android:name="com.example.yogiflow.ui.fragments.recipes.RecipesFragment"
-        android:label="Recipes"
+        android:label="Poses"
         tools:layout="@layout/fragment_recipes" >
         <action
             android:id="@+id/action_recipesFragment_to_recipesBottomSheet"

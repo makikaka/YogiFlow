@@ -111,7 +111,7 @@ class DetailsActivity : AppCompatActivity() {
             )
         mainViewModel.insertFavoriteRecipe(favoritesEntity)
         changeMenuItemColor(item, R.color.yellow)
-        showSnackBar("Recipe saved.")
+        showSnackBar("Pose saved.")
         recipeSaved = true
     }
 

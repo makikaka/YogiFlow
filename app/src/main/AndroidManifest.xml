@@ -21,13 +21,23 @@
             android:screenOrientation="portrait"
             android:theme="@style/DetailsActivityStyle" />
         <activity
-            android:name="com.example.yogiflow.ui.MainActivity"
+            android:name="com.example.yogiflow.ui.LoginActivity"
+            android:label="Login"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.yogiflow.ui.SignUpActivity"
+            android:label="SignUp"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name="com.example.yogiflow.ui.MainActivity"
+            android:screenOrientation="portrait">
+
         </activity>
 
         <meta-data
