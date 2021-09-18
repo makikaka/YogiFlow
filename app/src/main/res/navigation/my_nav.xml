@@ -24,7 +24,7 @@
     <fragment
         android:id="@+id/favoriteRecipesFragment"
         android:name="com.example.yogiflow.ui.fragments.favorites.FavoriteRecipesFragment"
-        android:label="Favorites"
+        android:label="Poses"
         tools:layout="@layout/fragment_favorite_recipes" >
         <action
             android:id="@+id/action_favoriteRecipesFragment_to_detailsActivity"

@@ -73,14 +73,6 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
                 }
         }
 
-        binding.recipesFab.setOnClickListener {
-            if (recipesViewModel.networkStatus) {
-                findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
-            } else {
-                recipesViewModel.showNetworkStatus()
-            }
-        }
-
         return binding.root
     }
 
