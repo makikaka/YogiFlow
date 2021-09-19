@@ -1,17 +1,20 @@
 package com.example.yogiflow.ui
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
+import android.widget.Toast.LENGTH_LONG
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
-import kotlinx.coroutines.Dispatchers
 import com.example.yogiflow.R
 import com.example.yogiflow.databinding.ActivityLoginBinding
 import com.example.yogiflow.models.AuthToken
@@ -19,42 +22,48 @@ import com.example.yogiflow.util.NetworkResult
 import com.example.yogiflow.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONException
-import org.json.JSONObject
 
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
     private lateinit var mainViewModel: MainViewModel
+    @SuppressLint("ResourceAsColor")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         binding = ActivityLoginBinding.inflate(layoutInflater)
-
+        val loginButton = findViewById(R.id.btn_login) as Button?
         mainViewModel.loginResponse.observe(this, Observer<NetworkResult<AuthToken>> { token: NetworkResult<AuthToken>? ->
-            if (token!!.data != null) {
-                val prefs: SharedPreferences
-                val edit: SharedPreferences.Editor
-                prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-                edit = prefs.edit()
+            loginButton!!.isEnabled = true;
 
-                try {
-                    val saveToken: String = token!!.data!!.authToken
-                    edit.putString("token", saveToken)
-                    Log.i("Login", saveToken)
-                    edit.apply()
-                } catch (e: JSONException) {
-                    e.printStackTrace()
+            when(token) {
+                is NetworkResult.Success -> {
+                    val prefs: SharedPreferences = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                    val edit: SharedPreferences.Editor = prefs.edit()
+
+                    try {
+                        val saveToken: String = token!!.data!!.authToken
+                        edit.putString("token", saveToken)
+                        Log.i("Login", saveToken)
+                        edit.apply()
+                    } catch (e: JSONException) {
+                        e.printStackTrace()
+                    }
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 }
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                is NetworkResult.Error -> {
+                    Toast.makeText(this, token.message, LENGTH_LONG).show()
+                }
+                is NetworkResult.Loading -> {
+                    loginButton.isEnabled = false;
+                }
             }
         })
 
-        val btn_login = findViewById(R.id.btn_login) as Button?
-
-        btn_login!!.setOnClickListener {
+        loginButton!!.setOnClickListener {
            doLogin()
         }
 

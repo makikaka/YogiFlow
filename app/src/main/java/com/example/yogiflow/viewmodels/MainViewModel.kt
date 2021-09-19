@@ -2,10 +2,9 @@ package com.example.yogiflow.viewmodels
 
 import android.app.Application
 import android.content.Context
-import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.yogiflow.data.Repository
 import com.example.yogiflow.data.database.entities.FavoritesEntity
@@ -17,10 +16,10 @@ import com.example.yogiflow.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import org.json.JSONException
+import org.json.JSONObject
 import retrofit2.Response
-import java.lang.Exception
 import javax.inject.Inject
+
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
@@ -134,7 +133,8 @@ class MainViewModel @Inject constructor(
             val foodRecipes = response.body()
             return NetworkResult.Success(foodRecipes!!)
         }
-        return NetworkResult.Error(response.message())
+        val jObjError = JSONObject(response.errorBody()!!.string())
+        return NetworkResult.Error(jObjError.getJSONObject("error").getString("message"),)
     }
 
     fun makeLoginRequest(username: String, password: String) {
