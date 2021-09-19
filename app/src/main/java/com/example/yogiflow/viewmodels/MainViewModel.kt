@@ -31,7 +31,8 @@ class MainViewModel @Inject constructor(
     /** ROOM DATABASE */
 
     val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readRecipes().asLiveData()
-    val readFavoriteRecipes: LiveData<List<FavoritesEntity>> = repository.local.readFavoriteRecipes().asLiveData()
+    val readFavoriteRecipes: LiveData<List<FavoritesEntity>> =
+        repository.local.readFavoriteRecipes().asLiveData()
 
     private fun insertRecipes(recipesEntity: RecipesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
@@ -75,7 +76,7 @@ class MainViewModel @Inject constructor(
                 recipesResponse.value = handleFoodRecipesResponse(response)
 
                 val foodRecipe = recipesResponse.value!!.data
-                if(foodRecipe != null) {
+                if (foodRecipe != null) {
                     offlineCacheRecipes(foodRecipe)
                 }
             } catch (e: Exception) {
@@ -138,18 +139,20 @@ class MainViewModel @Inject constructor(
 
     fun makeLoginRequest(username: String, password: String) {
         loginResponse.value = NetworkResult.Loading()
-        if (hasInternetConnection()) {
-            try {
-                viewModelScope.launch(Dispatchers.IO) {
-                    val response = repository.remote.login(username, password)
-                    loginResponse.value = handleLoginResponse(response)
-                }
+        viewModelScope.launch(Dispatchers.IO) {
+            if (hasInternetConnection()) {
+                try {
 
-            } catch (e: Exception) {
-                loginResponse.value = NetworkResult.Error("Token not found")
+                    val response = repository.remote.login(username, password)
+                    loginResponse.postValue(handleLoginResponse(response))
+
+
+                } catch (e: Exception) {
+                    loginResponse.postValue(NetworkResult.Error("Token not found"))
+                }
+            } else {
+                loginResponse.postValue(NetworkResult.Error("No Internet Connection."))
             }
-        } else {
-            loginResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
 
@@ -166,6 +169,7 @@ class MainViewModel @Inject constructor(
             registerResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
+
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(
             Context.CONNECTIVITY_SERVICE

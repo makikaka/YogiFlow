@@ -22,7 +22,7 @@
             android:theme="@style/DetailsActivityStyle" />
         <activity
             android:name="com.example.yogiflow.ui.LoginActivity"
-            android:label="Login"
+            android:label="Yogi Flow"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

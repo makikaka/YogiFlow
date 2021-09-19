@@ -34,6 +34,19 @@ class LoginActivity : AppCompatActivity() {
 
         mainViewModel.loginResponse.observe(this, Observer<NetworkResult<AuthToken>> { token: NetworkResult<AuthToken>? ->
             if (token!!.data != null) {
+                val prefs: SharedPreferences
+                val edit: SharedPreferences.Editor
+                prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
+                edit = prefs.edit()
+
+                try {
+                    val saveToken: String = token!!.data!!.authToken
+                    edit.putString("token", saveToken)
+                    Log.i("Login", saveToken)
+                    edit.apply()
+                } catch (e: JSONException) {
+                    e.printStackTrace()
+                }
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
@@ -82,19 +95,7 @@ class LoginActivity : AppCompatActivity() {
         mainViewModel.makeLoginRequest(email, password);
 
     // SHARED PREFERENCES
-//        val prefs: SharedPreferences
-//        val edit: SharedPreferences.Editor
-//        prefs = this.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
-//        edit = prefs.edit()
-//
-//        try {
-//            val saveToken: String = mainViewModel.loginResponse.value!!.data!!.authToken
-//            edit.putString("token", saveToken)
-//            Log.i("Login", saveToken)
-//            edit.apply()
-//        } catch (e: JSONException) {
-//            e.printStackTrace()
-//        }
+
     }
 
     private fun makeLoginRequest() {
