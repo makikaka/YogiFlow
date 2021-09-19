@@ -11,8 +11,8 @@ class RemoteDataSource @Inject constructor(
     private val yogaPosesApi: YogaPosesApi
 ) {
 
-    suspend fun getRecipes(): Response<List<Result>> {
-        val token = AuthToken("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoyLCJpYXQiOjE2MzEwOTcwMjksInN1YiI6Im1ha2kifQ.x-DZliG_qhcKD8TMn5PfSOyNVUXOLnS3m6AgzetJkEI")
+    suspend fun getRecipes(authToken: String): Response<List<Result>> {
+        val token = AuthToken(authToken)
         return yogaPosesApi.getRecipes(token)
     }
 
@@ -26,13 +26,10 @@ class RemoteDataSource @Inject constructor(
         return yogaPosesApi.login(loginRequest)
     }
 
-    suspend fun register(username: String, password: String): Response<AuthToken> {
-        val loginRequestMap : Map<String, Any> = mapOf(
-            "userName" to username,
-            "password" to password,
-            "fullname" to UUID.randomUUID().toString()
-        )
-        return yogaPosesApi.register(loginRequestMap)
+    suspend fun register(username: String, password: String): Response<Register> {
+        // Don't use fullname just create random UID to ignore it
+        val registerRequest = Register(username, UUID.randomUUID().toString(), password)
+        return yogaPosesApi.register(registerRequest)
     }
 
 //    suspend fun searchRecipes(searchQuery: Map<String, String>): Response<FoodRecipe> {

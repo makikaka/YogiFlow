@@ -2,6 +2,7 @@ package com.example.yogiflow.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.widget.Toast
@@ -11,6 +12,7 @@ import com.example.yogiflow.data.database.entities.FavoritesEntity
 import com.example.yogiflow.data.database.entities.RecipesEntity
 import com.example.yogiflow.models.AuthToken
 import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.models.Register
 import com.example.yogiflow.models.Result
 import com.example.yogiflow.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,6 +28,8 @@ class MainViewModel @Inject constructor(
     private val repository: Repository,
     application: Application
 ) : AndroidViewModel(application) {
+
+    val prefs: SharedPreferences = application.getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
     /** ROOM DATABASE */
 
@@ -71,7 +75,8 @@ class MainViewModel @Inject constructor(
         recipesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
-                val response = repository.remote.getRecipes()
+                val authToken = prefs.getString("token", "NO TOKEN")
+                val response = repository.remote.getRecipes(authToken!!)
                 recipesResponse.value = handleFoodRecipesResponse(response)
 
                 val foodRecipe = recipesResponse.value!!.data
@@ -137,6 +142,14 @@ class MainViewModel @Inject constructor(
         return NetworkResult.Error(jObjError.getJSONObject("error").getString("message"),)
     }
 
+    private fun handleRegisterResponse(response: Response<Register>): NetworkResult<Boolean>? {
+        if (response.isSuccessful) {
+            return NetworkResult.Success(true)
+        }
+        val jObjError = JSONObject(response.errorBody()!!.string())
+        return NetworkResult.Error(jObjError.getJSONObject("error").getString("message"),)
+    }
+
     fun makeLoginRequest(username: String, password: String) {
         loginResponse.value = NetworkResult.Loading()
         viewModelScope.launch(Dispatchers.IO) {
@@ -156,17 +169,19 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    suspend fun makeRegisterRequest(username: String, password: String) {
+    fun makeRegisterRequest(username: String, password: String) {
         registerResponse.value = NetworkResult.Loading()
-        if (hasInternetConnection()) {
-            try {
-                val response = repository.remote.register(username, password)
-                registerResponse.value = NetworkResult.Success(true)
-            } catch (e: Exception) {
-                registerResponse.value = NetworkResult.Error(e.message)
+        viewModelScope.launch(Dispatchers.IO) {
+            if (hasInternetConnection()) {
+                try {
+                    val response = repository.remote.register(username, password)
+                    registerResponse.postValue(handleRegisterResponse(response))
+                } catch (e: Exception) {
+                    registerResponse.postValue(NetworkResult.Error(e.message))
+                }
+            } else {
+                registerResponse.postValue(NetworkResult.Error("No Internet Connection."))
             }
-        } else {
-            registerResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
 

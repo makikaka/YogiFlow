@@ -13,7 +13,7 @@ interface YogaPosesApi {
     suspend fun login(@Body login: Login): Response<AuthToken>
 
     @POST("/api/register")
-    suspend fun register(@Body register: Map<String, Any>): Response<AuthToken>
+    suspend fun register(@Body register: Register): Response<Register>
 
 //    @GET("/recipes/complexSearch")
 //    suspend fun searchRecipes(
