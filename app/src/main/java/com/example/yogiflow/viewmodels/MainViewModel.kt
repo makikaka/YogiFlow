@@ -2,6 +2,7 @@ package com.example.yogiflow.viewmodels
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.util.Log
@@ -9,12 +10,14 @@ import androidx.lifecycle.*
 import com.example.yogiflow.data.Repository
 import com.example.yogiflow.data.database.entities.FavoritesEntity
 import com.example.yogiflow.data.database.entities.RecipesEntity
+import com.example.yogiflow.models.AuthToken
 import com.example.yogiflow.models.FoodRecipe
 import com.example.yogiflow.models.Result
 import com.example.yogiflow.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import org.json.JSONException
 import retrofit2.Response
 import java.lang.Exception
 import javax.inject.Inject
@@ -52,6 +55,8 @@ class MainViewModel @Inject constructor(
 
     /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var loginResponse: MutableLiveData<NetworkResult<AuthToken>> = MutableLiveData()
+    var registerResponse: MutableLiveData<NetworkResult<Boolean>> = MutableLiveData()
     var searchedRecipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
     fun getRecipes() = viewModelScope.launch {
@@ -123,6 +128,44 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    private fun handleLoginResponse(response: Response<AuthToken>): NetworkResult<AuthToken> {
+        if (response.isSuccessful) {
+            val foodRecipes = response.body()
+            return NetworkResult.Success(foodRecipes!!)
+        }
+        return NetworkResult.Error(response.message())
+    }
+
+    fun makeLoginRequest(username: String, password: String) {
+        loginResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                viewModelScope.launch(Dispatchers.IO) {
+                    val response = repository.remote.login(username, password)
+                    loginResponse.value = handleLoginResponse(response)
+                }
+
+            } catch (e: Exception) {
+                loginResponse.value = NetworkResult.Error("Token not found")
+            }
+        } else {
+            loginResponse.value = NetworkResult.Error("No Internet Connection.")
+        }
+    }
+
+    suspend fun makeRegisterRequest(username: String, password: String) {
+        registerResponse.value = NetworkResult.Loading()
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remote.register(username, password)
+                registerResponse.value = NetworkResult.Success(true)
+            } catch (e: Exception) {
+                registerResponse.value = NetworkResult.Error(e.message)
+            }
+        } else {
+            registerResponse.value = NetworkResult.Error("No Internet Connection.")
+        }
+    }
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = getApplication<Application>().getSystemService(
             Context.CONNECTIVITY_SERVICE
