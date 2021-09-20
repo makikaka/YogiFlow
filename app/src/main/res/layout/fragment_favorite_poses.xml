@@ -11,20 +11,20 @@
 
         <variable
             name="mAdapter"
-            type="com.example.yogiflow.adapters.FavoriteRecipesAdapter" />
+            type="com.example.yogiflow.adapters.FavoritePosesAdapter" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
-        tools:context=".ui.fragments.favorites.FavoriteRecipesFragment">
+        tools:context=".ui.fragments.favorites.FavoritePosesFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/favoriteRecipesRecyclerView"
+            android:id="@+id/favoritePosesRecyclerView"
             setData="@{mAdapter}"
-            setVisibility="@{mainViewModel.readFavoriteRecipes}"
+            setVisibility="@{mainViewModel.readFavoritePoses}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
@@ -37,7 +37,7 @@
 
         <ImageView
             android:id="@+id/no_data_imageView"
-            setVisibility="@{mainViewModel.readFavoriteRecipes}"
+            setVisibility="@{mainViewModel.readFavoritePoses}"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:alpha="0.5"
@@ -52,12 +52,12 @@
 
         <TextView
             android:id="@+id/no_data_textView"
-            setVisibility="@{mainViewModel.readFavoriteRecipes}"
+            setVisibility="@{mainViewModel.readFavoritePoses}"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:alpha="0.5"
-            android:text="@string/no_favorite_recipes"
+            android:text="@string/no_favorite_poses"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="invisible"

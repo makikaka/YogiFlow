@@ -4,16 +4,16 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.example.yogiflow.data.database.entities.FavoritesEntity
-import com.example.yogiflow.data.database.entities.RecipesEntity
+import com.example.yogiflow.data.database.entities.PosesEntity
 
 @Database(
-    entities = [RecipesEntity::class, FavoritesEntity::class],
+    entities = [PosesEntity::class, FavoritesEntity::class],
     version = 1,
     exportSchema = false
 )
-@TypeConverters(RecipesTypeConverter::class)
-abstract class RecipesDatabase: RoomDatabase() {
+@TypeConverters(PosesTypeConverter::class)
+abstract class PosesDatabase: RoomDatabase() {
 
-    abstract fun recipesDao(): RecipesDao
+    abstract fun posesDao(): PosesDao
 
 }

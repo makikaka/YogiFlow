@@ -2,7 +2,7 @@ package com.example.yogiflow.di
 
 import android.content.Context
 import androidx.room.Room
-import com.example.yogiflow.data.database.RecipesDatabase
+import com.example.yogiflow.data.database.PosesDatabase
 import com.example.yogiflow.util.Constants.Companion.DATABASE_NAME
 import dagger.Module
 import dagger.Provides
@@ -21,12 +21,12 @@ object DatabaseModule {
         @ApplicationContext context: Context
     ) = Room.databaseBuilder(
         context,
-        RecipesDatabase::class.java,
+        PosesDatabase::class.java,
         DATABASE_NAME
     ).build()
 
     @Singleton
     @Provides
-    fun provideDao(database: RecipesDatabase) = database.recipesDao()
+    fun provideDao(database: PosesDatabase) = database.posesDao()
 
 }

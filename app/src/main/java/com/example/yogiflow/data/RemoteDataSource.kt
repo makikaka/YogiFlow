@@ -11,9 +11,9 @@ class RemoteDataSource @Inject constructor(
     private val yogaPosesApi: YogaPosesApi
 ) {
 
-    suspend fun getRecipes(authToken: String): Response<List<Result>> {
+    suspend fun getPoses(authToken: String): Response<List<Result>> {
         val token = AuthToken(authToken)
-        return yogaPosesApi.getRecipes(token)
+        return yogaPosesApi.getPoses(token)
     }
 
     suspend fun login(username: String, password: String): Response<AuthToken> {
@@ -32,8 +32,8 @@ class RemoteDataSource @Inject constructor(
         return yogaPosesApi.register(registerRequest)
     }
 
-//    suspend fun searchRecipes(searchQuery: Map<String, String>): Response<FoodRecipe> {
-//        return yogaPosesApi.searchRecipes(searchQuery)
+//    suspend fun searchPoses(searchQuery: Map<String, String>): Response<FoodPose> {
+//        return yogaPosesApi.searchPoses(searchQuery)
 //    }
 //
 //    suspend fun getFoodJoke(apiKey: String): Response<FoodJoke> {

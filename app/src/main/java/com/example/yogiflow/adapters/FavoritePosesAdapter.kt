@@ -8,27 +8,27 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.yogiflow.R
 import com.example.yogiflow.data.database.entities.FavoritesEntity
-import com.example.yogiflow.databinding.FavoriteRecipesRowLayoutBinding
-import com.example.yogiflow.ui.fragments.favorites.FavoriteRecipesFragmentDirections
-import com.example.yogiflow.util.RecipesDiffUtil
+import com.example.yogiflow.databinding.FavoritePosesRowLayoutBinding
+import com.example.yogiflow.ui.fragments.favorites.FavoritePosesFragmentDirections
+import com.example.yogiflow.util.PosesDiffUtil
 import com.example.yogiflow.viewmodels.MainViewModel
 import com.google.android.material.snackbar.Snackbar
 
-class FavoriteRecipesAdapter(
+class FavoritePosesAdapter(
     private val requireActivity: FragmentActivity,
     private val mainViewModel: MainViewModel
-) : RecyclerView.Adapter<FavoriteRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
+) : RecyclerView.Adapter<FavoritePosesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var multiSelection = false
 
     private lateinit var mActionMode: ActionMode
     private lateinit var rootView: View
 
-    private var selectedRecipes = arrayListOf<FavoritesEntity>()
+    private var selectedPoses = arrayListOf<FavoritesEntity>()
     private var myViewHolders = arrayListOf<MyViewHolder>()
-    private var favoriteRecipes = emptyList<FavoritesEntity>()
+    private var favoritePoses = emptyList<FavoritesEntity>()
 
-    class MyViewHolder(val binding: FavoriteRecipesRowLayoutBinding) :
+    class MyViewHolder(val binding: FavoritePosesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(favoritesEntity: FavoritesEntity) {
@@ -39,7 +39,7 @@ class FavoriteRecipesAdapter(
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FavoriteRecipesRowLayoutBinding.inflate(layoutInflater, parent, false)
+                val binding = FavoritePosesRowLayoutBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }
@@ -54,21 +54,21 @@ class FavoriteRecipesAdapter(
         myViewHolders.add(holder)
         rootView = holder.itemView.rootView
 
-        val currentRecipe = favoriteRecipes[position]
-        holder.bind(currentRecipe)
+        val currentPose = favoritePoses[position]
+        holder.bind(currentPose)
 
-        saveItemStateOnScroll(currentRecipe, holder)
+        saveItemStateOnScroll(currentPose, holder)
 
         /**
          * Single Click Listener
          * */
-        holder.binding.favoriteRecipesRowLayout.setOnClickListener {
+        holder.binding.favoritePosesRowLayout.setOnClickListener {
             if (multiSelection) {
-                applySelection(holder, currentRecipe)
+                applySelection(holder, currentPose)
             } else {
                 val action =
-                    FavoriteRecipesFragmentDirections.actionFavoriteRecipesFragmentToDetailsActivity(
-                        currentRecipe.result
+                    FavoritePosesFragmentDirections.actionFavoritePosesFragmentToDetailsActivity(
+                        currentPose.result
                     )
                 holder.itemView.findNavController().navigate(action)
             }
@@ -77,14 +77,14 @@ class FavoriteRecipesAdapter(
         /**
          * Long Click Listener
          * */
-        holder.binding.favoriteRecipesRowLayout.setOnLongClickListener {
+        holder.binding.favoritePosesRowLayout.setOnLongClickListener {
             if (!multiSelection) {
                 multiSelection = true
                 requireActivity.startActionMode(this)
-                applySelection(holder, currentRecipe)
+                applySelection(holder, currentPose)
                 true
             } else {
-                applySelection(holder, currentRecipe)
+                applySelection(holder, currentPose)
                 true
             }
 
@@ -92,28 +92,28 @@ class FavoriteRecipesAdapter(
 
     }
 
-    private fun saveItemStateOnScroll(currentRecipe: FavoritesEntity, holder: MyViewHolder){
-        if (selectedRecipes.contains(currentRecipe)) {
-            changeRecipeStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
+    private fun saveItemStateOnScroll(currentPose: FavoritesEntity, holder: MyViewHolder){
+        if (selectedPoses.contains(currentPose)) {
+            changePoseStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
         } else {
-            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+            changePoseStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
         }
     }
 
-    private fun applySelection(holder: MyViewHolder, currentRecipe: FavoritesEntity) {
-        if (selectedRecipes.contains(currentRecipe)) {
-            selectedRecipes.remove(currentRecipe)
-            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+    private fun applySelection(holder: MyViewHolder, currentPose: FavoritesEntity) {
+        if (selectedPoses.contains(currentPose)) {
+            selectedPoses.remove(currentPose)
+            changePoseStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
             applyActionModeTitle()
         } else {
-            selectedRecipes.add(currentRecipe)
-            changeRecipeStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
+            selectedPoses.add(currentPose)
+            changePoseStyle(holder, R.color.cardBackgroundLightColor, R.color.colorPrimary)
             applyActionModeTitle()
         }
     }
 
-    private fun changeRecipeStyle(holder: MyViewHolder, backgroundColor: Int, strokeColor: Int) {
-        holder.binding.favoriteRecipesRowLayout.setBackgroundColor(
+    private fun changePoseStyle(holder: MyViewHolder, backgroundColor: Int, strokeColor: Int) {
+        holder.binding.favoritePosesRowLayout.setBackgroundColor(
             ContextCompat.getColor(requireActivity, backgroundColor)
         )
         holder.binding.favoriteRowCardView.strokeColor =
@@ -121,22 +121,22 @@ class FavoriteRecipesAdapter(
     }
 
     private fun applyActionModeTitle() {
-        when (selectedRecipes.size) {
+        when (selectedPoses.size) {
             0 -> {
                 mActionMode.finish()
                 multiSelection = false
             }
             1 -> {
-                mActionMode.title = "${selectedRecipes.size} item selected"
+                mActionMode.title = "${selectedPoses.size} item selected"
             }
             else -> {
-                mActionMode.title = "${selectedRecipes.size} items selected"
+                mActionMode.title = "${selectedPoses.size} items selected"
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return favoriteRecipes.size
+        return favoritePoses.size
     }
 
     override fun onCreateActionMode(actionMode: ActionMode?, menu: Menu?): Boolean {
@@ -151,14 +151,14 @@ class FavoriteRecipesAdapter(
     }
 
     override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
-        if (menu?.itemId == R.id.delete_favorite_recipe_menu) {
-            selectedRecipes.forEach {
-                mainViewModel.deleteFavoriteRecipe(it)
+        if (menu?.itemId == R.id.delete_favorite_pose_menu) {
+            selectedPoses.forEach {
+                mainViewModel.deleteFavoritePose(it)
             }
-            showSnackBar("${selectedRecipes.size} Recipe/s removed.")
+            showSnackBar("${selectedPoses.size} Pose/s removed.")
 
             multiSelection = false
-            selectedRecipes.clear()
+            selectedPoses.clear()
             actionMode?.finish()
         }
         return true
@@ -166,10 +166,10 @@ class FavoriteRecipesAdapter(
 
     override fun onDestroyActionMode(actionMode: ActionMode?) {
         myViewHolders.forEach { holder ->
-            changeRecipeStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
+            changePoseStyle(holder, R.color.cardBackgroundColor, R.color.strokeColor)
         }
         multiSelection = false
-        selectedRecipes.clear()
+        selectedPoses.clear()
         applyStatusBarColor(R.color.statusBarColor)
     }
 
@@ -178,11 +178,11 @@ class FavoriteRecipesAdapter(
             ContextCompat.getColor(requireActivity, color)
     }
 
-    fun setData(newFavoriteRecipes: List<FavoritesEntity>) {
-        val favoriteRecipesDiffUtil =
-            RecipesDiffUtil(favoriteRecipes, newFavoriteRecipes)
-        val diffUtilResult = DiffUtil.calculateDiff(favoriteRecipesDiffUtil)
-        favoriteRecipes = newFavoriteRecipes
+    fun setData(newFavoritePoses: List<FavoritesEntity>) {
+        val favoritePosesDiffUtil =
+            PosesDiffUtil(favoritePoses, newFavoritePoses)
+        val diffUtilResult = DiffUtil.calculateDiff(favoritePosesDiffUtil)
+        favoritePoses = newFavoritePoses
         diffUtilResult.dispatchUpdatesTo(this)
     }
 

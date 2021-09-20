@@ -10,7 +10,7 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/favoriteRecipesRowLayout"
+        android:id="@+id/favoritePosesRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -35,7 +35,7 @@
                 android:background="@color/cardBackgroundColor">
 
                 <ImageView
-                    android:id="@+id/favorite_recipe_imageView"
+                    android:id="@+id/favorite_pose_imageView"
                     loadImageFromUrl="@{favoritesEntity.result.img}"
                     android:layout_width="200dp"
                     android:layout_height="0dp"
@@ -61,7 +61,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/favorite_recipe_imageView"
+                    app:layout_constraintStart_toEndOf="@+id/favorite_pose_imageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView

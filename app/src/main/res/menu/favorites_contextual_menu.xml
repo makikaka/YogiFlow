@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <item
-        android:id="@+id/delete_favorite_recipe_menu"
+        android:id="@+id/delete_favorite_pose_menu"
         android:icon="@drawable/ic_delete"
         android:iconTint="@color/white"
         android:title="@string/delete_favorite_menu"

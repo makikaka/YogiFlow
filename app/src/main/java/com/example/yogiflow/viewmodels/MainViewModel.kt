@@ -5,13 +5,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.widget.Toast
 import androidx.lifecycle.*
 import com.example.yogiflow.data.Repository
 import com.example.yogiflow.data.database.entities.FavoritesEntity
-import com.example.yogiflow.data.database.entities.RecipesEntity
+import com.example.yogiflow.data.database.entities.PosesEntity
 import com.example.yogiflow.models.AuthToken
-import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.models.Poses
 import com.example.yogiflow.models.Register
 import com.example.yogiflow.models.Result
 import com.example.yogiflow.util.NetworkResult
@@ -33,65 +32,65 @@ class MainViewModel @Inject constructor(
 
     /** ROOM DATABASE */
 
-    val readRecipes: LiveData<List<RecipesEntity>> = repository.local.readRecipes().asLiveData()
-    val readFavoriteRecipes: LiveData<List<FavoritesEntity>> =
-        repository.local.readFavoriteRecipes().asLiveData()
+    val readPoses: LiveData<List<PosesEntity>> = repository.local.readPoses().asLiveData()
+    val readFavoritePoses: LiveData<List<FavoritesEntity>> =
+        repository.local.readFavoritePoses().asLiveData()
 
-    private fun insertRecipes(recipesEntity: RecipesEntity) =
+    private fun insertPoses(posesEntity: PosesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertRecipes(recipesEntity)
+            repository.local.insertPoses(posesEntity)
         }
 
-    fun insertFavoriteRecipe(favoritesEntity: FavoritesEntity) =
+    fun insertFavoritePose(favoritesEntity: FavoritesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.insertFavoriteRecipes(favoritesEntity)
+            repository.local.insertFavoritePoses(favoritesEntity)
         }
 
-    fun deleteFavoriteRecipe(favoritesEntity: FavoritesEntity) =
+    fun deleteFavoritePose(favoritesEntity: FavoritesEntity) =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.deleteFavoriteRecipe(favoritesEntity)
+            repository.local.deleteFavoritePose(favoritesEntity)
         }
 
-    fun deleteAllFavoriteRecipes() =
+    fun deleteAllFavoritePoses() =
         viewModelScope.launch(Dispatchers.IO) {
-            repository.local.deleteAllFavoriteRecipes()
+            repository.local.deleteAllFavoritePoses()
         }
 
     /** RETROFIT */
-    var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
+    var posesResponse: MutableLiveData<NetworkResult<Poses>> = MutableLiveData()
     var loginResponse: MutableLiveData<NetworkResult<AuthToken>> = MutableLiveData()
     var registerResponse: MutableLiveData<NetworkResult<Boolean>> = MutableLiveData()
 
-    fun getRecipes() = viewModelScope.launch {
-        getRecipesSafeCall()
+    fun getPoses() = viewModelScope.launch {
+        getPosesSafeCall()
     }
 
-    private suspend fun getRecipesSafeCall() {
-        recipesResponse.value = NetworkResult.Loading()
+    private suspend fun getPosesSafeCall() {
+        posesResponse.value = NetworkResult.Loading()
         if (hasInternetConnection()) {
             try {
                 val authToken = prefs.getString("token", "NO TOKEN")
-                val response = repository.remote.getRecipes(authToken!!)
-                recipesResponse.value = handleFoodRecipesResponse(response)
+                val response = repository.remote.getPoses(authToken!!)
+                posesResponse.value = handleFoodPosesResponse(response)
 
-                val foodRecipe = recipesResponse.value!!.data
-                if (foodRecipe != null) {
-                    offlineCacheRecipes(foodRecipe)
+                val foodPose = posesResponse.value!!.data
+                if (foodPose != null) {
+                    offlineCachePoses(foodPose)
                 }
             } catch (e: Exception) {
-                recipesResponse.value = NetworkResult.Error("Poses not found.")
+                posesResponse.value = NetworkResult.Error("Poses not found.")
             }
         } else {
-            recipesResponse.value = NetworkResult.Error("No Internet Connection.")
+            posesResponse.value = NetworkResult.Error("No Internet Connection.")
         }
     }
 
-    private fun offlineCacheRecipes(foodRecipe: FoodRecipe) {
-        val recipesEntity = RecipesEntity(foodRecipe)
-        insertRecipes(recipesEntity)
+    private fun offlineCachePoses(poses: Poses) {
+        val posesEntity = PosesEntity(poses)
+        insertPoses(posesEntity)
     }
 
-    private fun handleFoodRecipesResponse(response: Response<List<Result>>): NetworkResult<FoodRecipe> {
+    private fun handleFoodPosesResponse(response: Response<List<Result>>): NetworkResult<Poses> {
 
         when {
             response.message().toString().contains("timeout") -> {
@@ -104,9 +103,9 @@ class MainViewModel @Inject constructor(
                 return NetworkResult.Error("Poses not found.")
             }
             response.isSuccessful -> {
-                val foodRecipes = response.body()
-                val foodRecipesModel = FoodRecipe(foodRecipes!!);
-                return NetworkResult.Success(foodRecipesModel)
+                val foodPoses = response.body()
+                val foodPosesModel = Poses(foodPoses!!);
+                return NetworkResult.Success(foodPosesModel)
             }
             else -> {
                 return NetworkResult.Error(response.message())
@@ -116,8 +115,8 @@ class MainViewModel @Inject constructor(
 
     private fun handleLoginResponse(response: Response<AuthToken>): NetworkResult<AuthToken> {
         if (response.isSuccessful) {
-            val foodRecipes = response.body()
-            return NetworkResult.Success(foodRecipes!!)
+            val foodPoses = response.body()
+            return NetworkResult.Success(foodPoses!!)
         }
         val jObjError = JSONObject(response.errorBody()!!.string())
         return NetworkResult.Error(jObjError.getJSONObject("error").getString("message"),)

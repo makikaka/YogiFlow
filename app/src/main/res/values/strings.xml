@@ -2,8 +2,8 @@
     <string name="app_name">YogiFlow</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
-    <string name="recipes_fragment">Poses</string>
-    <string name="favorite_recipes_fragment">Favorites</string>
+    <string name="poses_fragment">Poses</string>
+    <string name="favorite_poses_fragment">Favorites</string>
     <string name="food_joke_fragment">Food Joke</string>
 
     // Bottom Sheet
@@ -39,7 +39,7 @@
     <string name="healthy">Healthy</string>
     <string name="dairy_free">Dairy Free</string>
     <string name="save_to_favorites">Save to Favorites</string>
-    <string name="no_favorite_recipes">No Favorite Poses.</string>
+    <string name="no_favorite_poses">No Favorite Poses.</string>
     <string name="delete_favorite_menu">Delete Favorite Menu</string>
     <string name="delete_all">Delete All</string>
 

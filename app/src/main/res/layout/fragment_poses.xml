@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/backgroundColor"
-        tools:context=".ui.fragments.recipes.RecipesFragment">
+        tools:context=".ui.fragments.poses.PosesFragment">
 
         <com.facebook.shimmer.ShimmerFrameLayout
             android:id="@+id/shimmerFrameLayout"
@@ -55,8 +55,8 @@
             android:id="@+id/error_imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            readApiResponse="@{mainViewModel.recipesResponse}"
-            readDatabase="@{mainViewModel.readRecipes}"
+            readApiResponse="@{mainViewModel.posesResponse}"
+            readDatabase="@{mainViewModel.readPoses}"
             android:alpha="0.5"
             android:src="@drawable/ic_sad"
             android:visibility="invisible"
@@ -70,8 +70,8 @@
             android:id="@+id/error_textView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            readApiResponse="@{mainViewModel.recipesResponse}"
-            readDatabase="@{mainViewModel.readRecipes}"
+            readApiResponse="@{mainViewModel.posesResponse}"
+            readDatabase="@{mainViewModel.readPoses}"
             android:layout_marginTop="8dp"
             android:alpha="0.5"
             android:textSize="18sp"

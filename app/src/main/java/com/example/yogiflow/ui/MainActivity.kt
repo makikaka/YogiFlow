@@ -27,8 +27,8 @@ class MainActivity : AppCompatActivity() {
         navController = findNavController(R.id.navHostFragment)
         val appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.recipesFragment,
-                R.id.favoriteRecipesFragment
+                R.id.posesFragment,
+                R.id.favoritePosesFragment
             )
         )
 

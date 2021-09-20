@@ -24,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RecipesViewModel @Inject constructor(
+class PosesViewModel @Inject constructor(
     application: Application,
     private val dataStoreRepository: DataStoreRepository
 ) : AndroidViewModel(application) {
@@ -39,7 +39,7 @@ class RecipesViewModel @Inject constructor(
 
     fun saveMealAndDietType() =
         viewModelScope.launch(Dispatchers.IO) {
-            if (this@RecipesViewModel::mealAndDiet.isInitialized) {
+            if (this@PosesViewModel::mealAndDiet.isInitialized) {
                 dataStoreRepository.saveMealAndDietType(
                     mealAndDiet.selectedMealType,
                     mealAndDiet.selectedMealTypeId,
@@ -76,7 +76,7 @@ class RecipesViewModel @Inject constructor(
         queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
         queries[QUERY_FILL_INGREDIENTS] = "true"
 
-        if (this@RecipesViewModel::mealAndDiet.isInitialized) {
+        if (this@PosesViewModel::mealAndDiet.isInitialized) {
             queries[QUERY_TYPE] = mealAndDiet.selectedMealType
             queries[QUERY_DIET] = mealAndDiet.selectedDietType
         } else {

@@ -11,7 +11,7 @@ class Constants {
         // YOGI API
          const val BASE_URL = "http://192.168.100.11:8000"
 
-        const val RECIPE_RESULT_KEY = "recipeBundle"
+        const val RECIPE_RESULT_KEY = "poseBundle"
 
         // API Query Keys
         const val QUERY_SEARCH = "query"
@@ -19,7 +19,7 @@ class Constants {
         const val QUERY_API_KEY = "apiKey"
         const val QUERY_TYPE = "type"
         const val QUERY_DIET = "diet"
-        const val QUERY_ADD_RECIPE_INFORMATION = "addRecipeInformation"
+        const val QUERY_ADD_RECIPE_INFORMATION = "addPoseInformation"
         const val QUERY_FILL_INGREDIENTS = "fillIngredients"
 
         // ROOM Database

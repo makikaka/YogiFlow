@@ -7,7 +7,7 @@ import retrofit2.http.*
 interface YogaPosesApi {
 
     @GET("/api/poses")
-    suspend fun getRecipes(@Header("Authorization") authToken: AuthToken): Response<List<Result>>
+    suspend fun getPoses(@Header("Authorization") authToken: AuthToken): Response<List<Result>>
 
     @POST("/api/login")
     suspend fun login(@Body login: Login): Response<AuthToken>
@@ -15,10 +15,10 @@ interface YogaPosesApi {
     @POST("/api/register")
     suspend fun register(@Body register: Register): Response<Register>
 
-//    @GET("/recipes/complexSearch")
-//    suspend fun searchRecipes(
+//    @GET("/poses/complexSearch")
+//    suspend fun searchPoses(
 //        @QueryMap searchQuery: Map<String, String>
-//    ): Response<FoodRecipe>
+//    ): Response<FoodPose>
 //
 //    @GET("food/jokes/random")
 //    suspend fun getFoodJoke(

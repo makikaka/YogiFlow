@@ -4,16 +4,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.yogiflow.databinding.RecipesRowLayoutBinding
-import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.databinding.PosesRowLayoutBinding
+import com.example.yogiflow.models.Poses
 import com.example.yogiflow.models.Result
-import com.example.yogiflow.util.RecipesDiffUtil
+import com.example.yogiflow.util.PosesDiffUtil
 
-class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
+class PosesAdapter : RecyclerView.Adapter<PosesAdapter.MyViewHolder>() {
 
-    public var recipes = emptyList<Result>()
+    public var poses = emptyList<Result>()
 
-    class MyViewHolder(private val binding: RecipesRowLayoutBinding) :
+    class MyViewHolder(private val binding: PosesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(result: Result){
@@ -24,7 +24,7 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
         companion object {
             fun from(parent: ViewGroup): MyViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = RecipesRowLayoutBinding.inflate(layoutInflater, parent, false)
+                val binding = PosesRowLayoutBinding.inflate(layoutInflater, parent, false)
                 return MyViewHolder(binding)
             }
         }
@@ -36,19 +36,19 @@ class RecipesAdapter : RecyclerView.Adapter<RecipesAdapter.MyViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentRecipe = recipes[position]
-        holder.bind(currentRecipe)
+        val currentPose = poses[position]
+        holder.bind(currentPose)
     }
 
     override fun getItemCount(): Int {
-        return recipes.size
+        return poses.size
     }
 
-    fun setData(newData: FoodRecipe){
-        val recipesDiffUtil =
-            RecipesDiffUtil(recipes, newData.results)
-        val diffUtilResult = DiffUtil.calculateDiff(recipesDiffUtil)
-        recipes = newData.results
+    fun setData(newData: Poses){
+        val posesDiffUtil =
+            PosesDiffUtil(poses, newData.results)
+        val diffUtilResult = DiffUtil.calculateDiff(posesDiffUtil)
+        poses = newData.results
         diffUtilResult.dispatchUpdatesTo(this)
     }
 }

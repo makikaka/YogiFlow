@@ -1,23 +1,23 @@
 package com.example.yogiflow.data.database
 
 import androidx.room.TypeConverter
-import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.models.Poses
 import com.example.yogiflow.models.Result
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class RecipesTypeConverter {
+class PosesTypeConverter {
 
     var gson = Gson()
 
     @TypeConverter
-    fun foodRecipeToString(foodRecipe: FoodRecipe): String {
-        return gson.toJson(foodRecipe)
+    fun foodPoseToString(poses: Poses): String {
+        return gson.toJson(poses)
     }
 
     @TypeConverter
-    fun stringToFoodRecipe(data: String): FoodRecipe {
-        val listType = object : TypeToken<FoodRecipe>() {}.type
+    fun stringToFoodPose(data: String): Poses {
+        val listType = object : TypeToken<Poses>() {}.type
         return gson.fromJson(data, listType)
     }
 

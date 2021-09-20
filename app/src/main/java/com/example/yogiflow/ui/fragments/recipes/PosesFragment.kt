@@ -1,4 +1,4 @@
-package com.example.yogiflow.ui.fragments.recipes
+package com.example.yogiflow.ui.fragments.poses
 
 import android.os.Bundle
 import android.util.Log
@@ -8,18 +8,17 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.yogiflow.viewmodels.MainViewModel
 import com.example.yogiflow.R
-import com.example.yogiflow.adapters.RecipesAdapter
-import com.example.yogiflow.databinding.FragmentRecipesBinding
-import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.adapters.PosesAdapter
+import com.example.yogiflow.databinding.FragmentPosesBinding
+import com.example.yogiflow.models.Poses
 import com.example.yogiflow.util.NetworkListener
 import com.example.yogiflow.util.NetworkResult
 import com.example.yogiflow.util.observeOnce
-import com.example.yogiflow.viewmodels.RecipesViewModel
+import com.example.yogiflow.viewmodels.PosesViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -27,23 +26,23 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
+class PosesFragment : Fragment(), SearchView.OnQueryTextListener {
 
-    private val args by navArgs<RecipesFragmentArgs>()
+    private val args by navArgs<PosesFragmentArgs>()
 
-    private var _binding: FragmentRecipesBinding? = null
+    private var _binding: FragmentPosesBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var recipesViewModel: RecipesViewModel
-    private val mAdapter by lazy { RecipesAdapter() }
+    private lateinit var posesViewModel: PosesViewModel
+    private val mAdapter by lazy { PosesAdapter() }
 
     private lateinit var networkListener: NetworkListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mainViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
-        recipesViewModel = ViewModelProvider(requireActivity()).get(RecipesViewModel::class.java)
+        posesViewModel = ViewModelProvider(requireActivity()).get(PosesViewModel::class.java)
     }
 
     override fun onCreateView(
@@ -51,7 +50,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
         savedInstanceState: Bundle?
     ): View {
         // Inflate the layout for this fragment
-        _binding = FragmentRecipesBinding.inflate(inflater, container, false)
+        _binding = FragmentPosesBinding.inflate(inflater, container, false)
         binding.lifecycleOwner = this
         binding.mainViewModel = mainViewModel
 
@@ -59,8 +58,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
         setupRecyclerView()
 
-        recipesViewModel.readBackOnline.observe(viewLifecycleOwner, {
-            recipesViewModel.backOnline = it
+        posesViewModel.readBackOnline.observe(viewLifecycleOwner, {
+            posesViewModel.backOnline = it
         })
 
         lifecycleScope.launchWhenStarted {
@@ -68,8 +67,8 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
             networkListener.checkNetworkAvailability(requireContext())
                 .collect { status ->
                     Log.d("NetworkListener", status.toString())
-                    recipesViewModel.networkStatus = status
-                    recipesViewModel.showNetworkStatus()
+                    posesViewModel.networkStatus = status
+                    posesViewModel.showNetworkStatus()
                     readDatabase()
                 }
         }
@@ -84,7 +83,7 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.recipes_menu, menu)
+        inflater.inflate(R.menu.poses_menu, menu)
 
         val search = menu.findItem(R.id.menu_search)
         val searchView = search.actionView as? SearchView
@@ -105,10 +104,10 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observeOnce(viewLifecycleOwner, { database ->
+            mainViewModel.readPoses.observeOnce(viewLifecycleOwner, { database ->
                 if (database.isNotEmpty() && !args.backFromBottomSheet) {
-                    Log.d("RecipesFragment", "readDatabase called!")
-                    mAdapter.setData(database.first().foodRecipe)
+                    Log.d("PosesFragment", "readDatabase called!")
+                    mAdapter.setData(database.first().poses)
                     hideShimmerEffect()
                 } else {
                     requestApiData()
@@ -118,14 +117,14 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun requestApiData() {
-        Log.d("RecipesFragment", "requestApiData called!")
-        mainViewModel.getRecipes()
-        mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
+        Log.d("PosesFragment", "requestApiData called!")
+        mainViewModel.getPoses()
+        mainViewModel.posesResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
                     response.data?.let { mAdapter.setData(it) }
-                    recipesViewModel.saveMealAndDietType()
+                    posesViewModel.saveMealAndDietType()
                 }
                 is NetworkResult.Error -> {
                     hideShimmerEffect()
@@ -144,14 +143,14 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun searchApiData(searchQuery: String) {
-        mainViewModel.getRecipes()
-        mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
+        mainViewModel.getPoses()
+        mainViewModel.posesResponse.observe(viewLifecycleOwner, { response ->
             when (response) {
                 is NetworkResult.Success -> {
                     hideShimmerEffect()
                     val filteredData = response.data!!.results.filter { res -> res.name_eng.lowercase().contains(searchQuery.lowercase()) }
-                    filteredData.let { mAdapter.setData(FoodRecipe(it)) }
-                    recipesViewModel.saveMealAndDietType()
+                    filteredData.let { mAdapter.setData(Poses(it)) }
+                    posesViewModel.saveMealAndDietType()
                 }
                 is NetworkResult.Error -> {
                     hideShimmerEffect()
@@ -171,9 +170,9 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun loadDataFromCache() {
         lifecycleScope.launch {
-            mainViewModel.readRecipes.observe(viewLifecycleOwner, { database ->
+            mainViewModel.readPoses.observe(viewLifecycleOwner, { database ->
                 if (database.isNotEmpty()) {
-                    mAdapter.setData(database.first().foodRecipe)
+                    mAdapter.setData(database.first().poses)
                 }
             })
         }

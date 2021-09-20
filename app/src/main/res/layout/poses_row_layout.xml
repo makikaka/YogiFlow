@@ -10,8 +10,8 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/recipesRowLayout"
-        onRecipeClickListener="@{result}"
+        android:id="@+id/posesRowLayout"
+        onPoseClickListener="@{result}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -36,7 +36,7 @@
                 android:background="@color/cardBackgroundColor">
 
                 <ImageView
-                    android:id="@+id/recipe_imageView"
+                    android:id="@+id/pose_imageView"
                     android:layout_width="200dp"
                     android:layout_height="0dp"
                     loadImageFromUrl="@{result.img}"
@@ -62,7 +62,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toEndOf="@+id/recipe_imageView"
+                    app:layout_constraintStart_toEndOf="@+id/pose_imageView"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView

@@ -5,11 +5,11 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.databinding.BindingAdapter
-import com.example.yogiflow.data.database.entities.RecipesEntity
-import com.example.yogiflow.models.FoodRecipe
+import com.example.yogiflow.data.database.entities.PosesEntity
+import com.example.yogiflow.models.Poses
 import com.example.yogiflow.util.NetworkResult
 
-class RecipesBinding {
+class PosesBinding {
 
     companion object {
 
@@ -17,8 +17,8 @@ class RecipesBinding {
         @JvmStatic
         fun handleReadDataErrors(
             view: View,
-            apiResponse: NetworkResult<FoodRecipe>?,
-            database: List<RecipesEntity>?
+            apiResponse: NetworkResult<Poses>?,
+            database: List<PosesEntity>?
         ){
             when (view){
                 is ImageView ->{

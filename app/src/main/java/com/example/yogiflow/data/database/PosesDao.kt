@@ -2,28 +2,28 @@ package com.example.yogiflow.data.database
 
 import androidx.room.*
 import com.example.yogiflow.data.database.entities.FavoritesEntity
-import com.example.yogiflow.data.database.entities.RecipesEntity
+import com.example.yogiflow.data.database.entities.PosesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
-interface RecipesDao {
+interface PosesDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRecipes(recipesEntity: RecipesEntity)
+    suspend fun insertPoses(posesEntity: PosesEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertFavoriteRecipe(favoritesEntity: FavoritesEntity)
+    suspend fun insertFavoritePose(favoritesEntity: FavoritesEntity)
 
     @Query("SELECT * FROM poses_table ORDER BY id ASC")
-    fun readRecipes(): Flow<List<RecipesEntity>>
+    fun readPoses(): Flow<List<PosesEntity>>
 
     @Query("SELECT * FROM favorite_poses_table ORDER BY id ASC")
-    fun readFavoriteRecipes(): Flow<List<FavoritesEntity>>
+    fun readFavoritePoses(): Flow<List<FavoritesEntity>>
 
     @Delete
-    suspend fun deleteFavoriteRecipe(favoritesEntity: FavoritesEntity)
+    suspend fun deleteFavoritePose(favoritesEntity: FavoritesEntity)
 
     @Query("DELETE FROM favorite_poses_table")
-    suspend fun deleteAllFavoriteRecipes()
+    suspend fun deleteAllFavoritePoses()
 
 }

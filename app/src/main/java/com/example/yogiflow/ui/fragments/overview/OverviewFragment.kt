@@ -11,7 +11,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import coil.load
 import com.example.yogiflow.R
-import com.example.yogiflow.bindingadapters.RecipesRowBinding
+import com.example.yogiflow.bindingadapters.PosesRowBinding
 import com.example.yogiflow.databinding.FragmentOverviewBinding
 import com.example.yogiflow.models.Result
 import com.example.yogiflow.util.Constants.Companion.RECIPE_RESULT_KEY
