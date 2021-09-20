@@ -1,5 +1,6 @@
 package com.example.yogiflow.ui.fragments.overview
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ class OverviewFragment : Fragment() {
     private var _binding: FragmentOverviewBinding? = null
     private val binding get() = _binding!!
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,8 +33,12 @@ class OverviewFragment : Fragment() {
         val myBundle: Result = args!!.getParcelable<Result>(RECIPE_RESULT_KEY) as Result
 
         binding.mainImageView.load(myBundle.img)
+        binding.timeTextView.text = myBundle.pose_level.ifEmpty { "intermediate" }
         binding.titleTextView.text = myBundle.name_eng
-        binding.timeTextView.text = myBundle.pose_level
+        binding.aliasName.text = "Alias: ${myBundle.alias.ifEmpty { "no info" }}"
+        binding.benefits.text = "Benefits: ${myBundle.benefits.ifEmpty { "no info" }}"
+        binding.sanskritName.text = "Sanskrit name: ${myBundle.name_san.ifEmpty { "no info" }}"
+        binding.poseType.text = "Pose Type: ${myBundle.pose_type.ifEmpty { "no info" }}"
 
         return binding.root
     }
