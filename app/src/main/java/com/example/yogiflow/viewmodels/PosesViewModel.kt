@@ -34,7 +34,6 @@ class PosesViewModel @Inject constructor(
     var networkStatus = false
     var backOnline = false
 
-    val readMealAndDietType = dataStoreRepository.readMealAndDietType
     val readBackOnline = dataStoreRepository.readBackOnline.asLiveData()
 
     fun saveMealAndDietType() =
@@ -49,53 +48,11 @@ class PosesViewModel @Inject constructor(
             }
         }
 
-    fun saveMealAndDietTypeTemp(
-        mealType: String,
-        mealTypeId: Int,
-        dietType: String,
-        dietTypeId: Int
-    ) {
-        mealAndDiet = MealAndDietType(
-            mealType,
-            mealTypeId,
-            dietType,
-            dietTypeId
-        )
-    }
-
     private fun saveBackOnline(backOnline: Boolean) =
         viewModelScope.launch(Dispatchers.IO) {
             dataStoreRepository.saveBackOnline(backOnline)
         }
 
-    fun applyQueries(): HashMap<String, String> {
-        val queries: HashMap<String, String> = HashMap()
-
-        queries[QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
-        queries[QUERY_API_KEY] = API_KEY
-        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[QUERY_FILL_INGREDIENTS] = "true"
-
-        if (this@PosesViewModel::mealAndDiet.isInitialized) {
-            queries[QUERY_TYPE] = mealAndDiet.selectedMealType
-            queries[QUERY_DIET] = mealAndDiet.selectedDietType
-        } else {
-            queries[QUERY_TYPE] = DEFAULT_MEAL_TYPE
-            queries[QUERY_DIET] = DEFAULT_DIET_TYPE
-        }
-
-        return queries
-    }
-
-    fun applySearchQuery(searchQuery: String): HashMap<String, String> {
-        val queries: HashMap<String, String> = HashMap()
-        queries[QUERY_SEARCH] = searchQuery
-        queries[QUERY_NUMBER] = DEFAULT_RECIPES_NUMBER
-        queries[QUERY_API_KEY] = API_KEY
-        queries[QUERY_ADD_RECIPE_INFORMATION] = "true"
-        queries[QUERY_FILL_INGREDIENTS] = "true"
-        return queries
-    }
 
     fun showNetworkStatus() {
         if (!networkStatus) {

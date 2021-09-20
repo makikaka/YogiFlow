@@ -99,6 +99,7 @@ class PosesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onQueryTextChange(p0: String?): Boolean {
+        requestApiData()
         return true
     }
 
