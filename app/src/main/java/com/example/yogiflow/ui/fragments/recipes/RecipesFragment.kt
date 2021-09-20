@@ -15,6 +15,7 @@ import com.example.yogiflow.viewmodels.MainViewModel
 import com.example.yogiflow.R
 import com.example.yogiflow.adapters.RecipesAdapter
 import com.example.yogiflow.databinding.FragmentRecipesBinding
+import com.example.yogiflow.models.FoodRecipe
 import com.example.yogiflow.util.NetworkListener
 import com.example.yogiflow.util.NetworkResult
 import com.example.yogiflow.util.observeOnce
@@ -144,28 +145,9 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
 
     private fun searchApiData(searchQuery: String) {
         showShimmerEffect()
-        mainViewModel.searchRecipes(recipesViewModel.applySearchQuery(searchQuery))
-        mainViewModel.searchedRecipesResponse.observe(viewLifecycleOwner, { response ->
-            when (response) {
-                is NetworkResult.Success -> {
-                    hideShimmerEffect()
-                    val foodRecipe = response.data
-                    foodRecipe?.let { mAdapter.setData(it) }
-                }
-                is NetworkResult.Error -> {
-                    hideShimmerEffect()
-                    loadDataFromCache()
-                    Toast.makeText(
-                        requireContext(),
-                        response.message.toString(),
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-                is NetworkResult.Loading -> {
-                    showShimmerEffect()
-                }
-            }
-        })
+        val foodRecipe = mAdapter.recipes!!.filter { res -> res.name_eng.contains(searchQuery) }
+        mAdapter.setData(FoodRecipe(foodRecipe))
+        hideShimmerEffect()
     }
 
     private fun loadDataFromCache() {
