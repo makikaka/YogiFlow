@@ -144,10 +144,29 @@ class RecipesFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     private fun searchApiData(searchQuery: String) {
-        showShimmerEffect()
-        val foodRecipe = mAdapter.recipes!!.filter { res -> res.name_eng.contains(searchQuery) }
-        mAdapter.setData(FoodRecipe(foodRecipe))
-        hideShimmerEffect()
+        mainViewModel.getRecipes()
+        mainViewModel.recipesResponse.observe(viewLifecycleOwner, { response ->
+            when (response) {
+                is NetworkResult.Success -> {
+                    hideShimmerEffect()
+                    val filteredData = response.data!!.results.filter { res -> res.name_eng.lowercase().contains(searchQuery.lowercase()) }
+                    filteredData.let { mAdapter.setData(FoodRecipe(it)) }
+                    recipesViewModel.saveMealAndDietType()
+                }
+                is NetworkResult.Error -> {
+                    hideShimmerEffect()
+                    loadDataFromCache()
+                    Toast.makeText(
+                        requireContext(),
+                        response.message.toString(),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                is NetworkResult.Loading -> {
+                    showShimmerEffect()
+                }
+            }
+        })
     }
 
     private fun loadDataFromCache() {
